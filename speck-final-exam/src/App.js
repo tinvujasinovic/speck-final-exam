@@ -1,24 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useEffect, useState } from 'react';
+import Title from './components/Title/Title';
+import Section from './components/Section/Section';
+import UserCard from './components/Card/UserCard';
 
 function App() {
+
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+
+    fetch("https://speck-events-api.herokuapp.com/api/user").then(res => res.json()).then(response => {
+      setStudents(response);
+    })
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Title title={"Speck Academy 2021"} />
+      <Section>
+        {students.length > 0 && students.map((student, index) => {
+          return <UserCard key={student.id} student={student}/>
+        })}
+      </Section>
+    </>
   );
 }
 
